@@ -27,22 +27,23 @@ public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        return _httpClientCache.Get(nameof(BunnyOpenApiHttpClient), (config: _config, baseUrl: _config["Bunny:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
-        {
-            var apiKey = state.config.GetValueStrict<string>("Bunny:ApiKey");
-            string authHeaderName = state.config["Bunny:AuthHeaderName"] ?? "Authorization";
-            string authHeaderValueTemplate = state.config["Bunny:AuthHeaderValueTemplate"] ?? "Bearer {token}";
-            string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
-
-            return new HttpClientOptions
+        return _httpClientCache.Get(nameof(BunnyOpenApiHttpClient),
+            (config: _config, baseUrl: _config["Bunny:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
             {
-                BaseAddress = new Uri(state.baseUrl),
-                DefaultRequestHeaders = new Dictionary<string, string>
+                var apiKey = state.config.GetValueStrict<string>("Bunny:ApiKey");
+                string authHeaderName = state.config["Bunny:AuthHeaderName"] ?? "Authorization";
+                string authHeaderValueTemplate = state.config["Bunny:AuthHeaderValueTemplate"] ?? "Bearer {token}";
+                string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
+
+                return new HttpClientOptions
                 {
-                    {authHeaderName, authHeaderValue},
-                }
-            };
-        }, cancellationToken);
+                    BaseAddress = new Uri(state.baseUrl),
+                    DefaultRequestHeaders = new Dictionary<string, string>
+                    {
+                        { authHeaderName, authHeaderValue },
+                    }
+                };
+            }, cancellationToken);
     }
 
     public void Dispose()
