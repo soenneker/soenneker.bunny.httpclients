@@ -11,7 +11,6 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Bunny.HttpClients;
 
-///<inheritdoc cref="IBunnyOpenApiHttpClient"/>
 public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
@@ -31,8 +30,8 @@ public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
             (config: _config, baseUrl: _config["Bunny:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
             {
                 var apiKey = state.config.GetValueStrict<string>("Bunny:ApiKey");
-                string authHeaderName = state.config["Bunny:AuthHeaderName"] ?? "Authorization";
-                string authHeaderValueTemplate = state.config["Bunny:AuthHeaderValueTemplate"] ?? "Bearer {token}";
+                string authHeaderName = state.config["Bunny:AuthHeaderName"] ?? "AccessKey";
+                string authHeaderValueTemplate = state.config["Bunny:AuthHeaderValueTemplate"] ?? "{token}";
                 string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
 
                 return new HttpClientOptions
@@ -46,18 +45,11 @@ public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
             }, cancellationToken);
     }
 
-    /// <summary>
-    /// Releases resources used by the current instance.
-    /// </summary>
     public void Dispose()
     {
         _httpClientCache.RemoveSync(nameof(BunnyOpenApiHttpClient));
     }
 
-    /// <summary>
-    /// Asynchronously releases resources used by the current instance.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
         return _httpClientCache.Remove(nameof(BunnyOpenApiHttpClient));

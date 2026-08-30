@@ -11,7 +11,7 @@ namespace Soenneker.Bunny.HttpClients.Registrars;
 public static class BunnyOpenApiHttpClientRegistrar
 {
     /// <summary>
-    /// Adds <see cref="BunnyOpenApiHttpClient"/> as a singleton service. <para/>
+    /// Adds <see cref="IBunnyOpenApiHttpClient"/> as a singleton service backed by the singleton HTTP-client cache.
     /// </summary>
     public static IServiceCollection AddBunnyOpenApiHttpClientAsSingleton(this IServiceCollection services)
     {
@@ -22,7 +22,7 @@ public static class BunnyOpenApiHttpClientRegistrar
     }
 
     /// <summary>
-    /// Adds <see cref="BunnyOpenApiHttpClient"/> as a scoped service. <para/>
+    /// Adds <see cref="IBunnyOpenApiHttpClient"/> as a scoped service backed by the singleton HTTP-client cache.
     /// </summary>
     public static IServiceCollection AddBunnyOpenApiHttpClientAsScoped(this IServiceCollection services)
     {
