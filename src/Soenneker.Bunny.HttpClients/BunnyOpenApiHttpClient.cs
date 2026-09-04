@@ -11,6 +11,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Bunny.HttpClients;
 
+/// <inheritdoc cref="IBunnyOpenApiHttpClient" />
 public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
