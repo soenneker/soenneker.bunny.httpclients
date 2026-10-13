@@ -30,7 +30,7 @@ public sealed class BunnyOpenApiHttpClient : IBunnyOpenApiHttpClient
         return _httpClientCache.Get(nameof(BunnyOpenApiHttpClient),
             (config: _config, baseUrl: _config["Bunny:ClientBaseUrl"] ?? _prodBaseUrl), static state =>
             {
-                var apiKey = state.config.GetValueStrict<string>("Bunny:ApiKey");
+                var apiKey = state.config.GetStringStrict("Bunny:ApiKey");
                 string authHeaderName = state.config["Bunny:AuthHeaderName"] ?? "AccessKey";
                 string authHeaderValueTemplate = state.config["Bunny:AuthHeaderValueTemplate"] ?? "{token}";
                 string authHeaderValue = authHeaderValueTemplate.Replace("{token}", apiKey, StringComparison.Ordinal);
